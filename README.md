@@ -21,11 +21,13 @@ This Web application use Python Flask Web framework and Flask-GoogleMap extensio
 * Install DataStax Enterprise with Apache Solr activated
 
   Free download here https://academy.datastax.com/downloads
+  
   Installation documentation here http://docs.datastax.com/en/datastax_enterprise/4.8/datastax_enterprise/install/installTOC.html
 
 * Install and setup Patrick API
 
   Get source code and instructions from my fork https://github.com/victorcouste/datastax-taxi-app
+  
   Create CQL schemas and Solr core as explained.
 
 * Install the killrtaxi Web app
