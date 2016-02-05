@@ -18,6 +18,12 @@ This Web application use Python Flask Web framework and Flask-GoogleMap extensio
   
       pip install flask-googlemaps
   
+* Install Geohash python module
+
+  Download from https://github.com/vinsci/geohash or from https://pypi.python.org/pypi/Geohash/ and run
+  
+  	python setup.py
+
 * Install DataStax Enterprise with Apache Solr activated
 
   Free download here https://academy.datastax.com/downloads
