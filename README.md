@@ -10,7 +10,9 @@ This Web application use Python Flask Web framework and Flask-GoogleMap extensio
 
 * Install the Python Flask framework
 
-  All instructions here http://flask.pocoo.org/docs/0.10/installation/#installation
+  Full instructions for Virtualenv here http://flask.pocoo.org/docs/0.10/installation/#installation or just run
+  
+      pip install flask
   
 * Install Flask-GoogleMap extension
 
