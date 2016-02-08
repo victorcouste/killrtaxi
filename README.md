@@ -80,3 +80,6 @@ Or
     python killrtaxi.py
   
   Now you must be able to go to http://127.0.0.1:5000/ and play with the application
+  
+  ![alt tag](https://github.com/victorcouste/killrtaxi/blob/master/static/KillrTaxi.png)
+  
