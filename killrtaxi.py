@@ -1,9 +1,9 @@
-from flask import Flask, render_template,request
+from flask import Flask, render_template,request,Markup
 from flask_googlemaps import GoogleMaps
 from flask_googlemaps import Map
-import requests
 import json
 import Geohash
+import getdata
 
 # configuration
 DEBUG = True
@@ -14,6 +14,17 @@ app.config.from_object(__name__)
 app.config.from_envvar('KILLRTAXI_SETTINGS', silent=True)
 
 GoogleMaps(app)
+
+initlat=51
+initlng=0
+
+init_vehicule_map = Map(
+    identifier="view-side",
+    lat=initlat,
+    lng=-initlng,
+    style="height:700px;width:700px;margin:0;",
+    zoom=5
+)
 
 @app.route("/")
 def home():
@@ -32,160 +43,123 @@ def home():
 #Geohash.encode(42.6, -5.6, precision=5)
 #Geohash.decode('ezs42')
 
+
 @app.route("/getme", methods=['GET', 'POST'])
 def getme():
-    error = None
-    debug=""
-    vehicule_map = Map(
-                identifier="view-side",
-                lat=37.4419,
-                lng=-122.1419,
-                style="height:700px;width:700px;margin:0;",
-                zoom=5
-    )
+
+    vehicule_map=init_vehicule_map
+
     if request.method == 'POST':
+
         if request.form['lon'] and request.form['lat'] and request.form['dist']:
+
             lon=request.form['lon']
             lat=request.form['lat']
             dist=request.form['dist']
-            url="http://localhost:8080/datastax-taxi-app/rest/search/"+lat+"/"+lon+"/"+dist
-            response=requests.get(url)
-            result=""
-            if(response.ok):
-                result=response.content
-            else:
-                return render_template('getme.html',error=error,vehicule_map=vehicule_map,debug=debug)
 
-            #result='[{"vehicle":"2","date":1452986285175,"latLong":{"lat":54.96848201388808,"lon":0.39963558097359564},"tile":"u1b29ne","tile2":""},' \
-            #      '{"vehicle":"2","date":1452986259330,"latLong":{"lat":54.968382013888075,"lon":0.39953558097359565},"tile":"u1b29nd","tile2":""},{"vehicle":"2","date":1452986233158,"latLong":{"lat":54.96828201388807,"lon":0.39963558097359564},"tile":"u1b29ne","tile2":""},{"vehicle":"2","date":1452986218088,"latLong":{"lat":54.968382013888075,"lon":0.39973558097359563},"tile":"u1b29ne","tile2":""},{"vehicle":"2","date":1452986198654,"latLong":{"lat":54.96848201388808,"lon":0.3998355809735956},"tile":"u1b29ne","tile2":""},{"vehicle":"2","date":1452986180302,"latLong":{"lat":54.96858201388808,"lon":0.3999355809735956},"tile":"u1b29ne","tile2":""},{"vehicle":"2","date":1452986173759,"latLong":{"lat":54.96848201388808,"lon":0.3998355809735956},"tile":"u1b29ne","tile2":""},{"vehicle":"2","date":1452986169289,"latLong":{"lat":54.968382013888075,"lon":0.39973558097359563},"tile":"u1b29ne","tile2":""},{"vehicle":"2","date":1452986150746,"latLong":{"lat":54.96828201388807,"lon":0.3998355809735956},"tile":"u1b29ne","tile2":""},{"vehicle":"2","date":1452986129093,"latLong":{"lat":54.96828201388807,"lon":0.3998355809735956},"tile":"u1b29ne","tile2":""},{"vehicle":"2","date":1452986116895,"latLong":{"lat":54.96828201388807,"lon":0.3998355809735956},"tile":"u1b29ne","tile2":""}]'
-            jData = json.loads(result)
-            markers_map=[]
-            for d in jData:
-                markers_map.append((d["latLong"]["lat"],d["latLong"]["lon"]))
+            markers_map=getdata.getvehicules_forme(lat,lon,dist)
+            nbmvts=len(markers_map)
 
-            nbmvts=len(jData)
-            #debug=result
             vehicule_map = Map(
                 identifier="view-side",
                 lat=lat,
                 lng=lon,
                 style="height:700px;width:700px;margin:10;",
                 zoom=12,
-                markers=markers_map
+                markers={'http://maps.google.com/mapfiles/ms/icons/green-dot.png':markers_map,
+                         'http://maps.google.com/mapfiles/ms/icons/blue-dot.png':[(lat, lon)]}
                 #markers=[(54.96848201388808, 0.39963558097359564),(54.968382013888075, -0.39953558097359565)]
             )
 
-            return render_template('getme.html', nbmvts=nbmvts,lon=lon,lat=lat,dist=dist,vehicule_map=vehicule_map,debug=debug)
-            #else:
-            #    error=response.raise_for_status().str
-    #else:
-    #    url="http://localhost:8080/datastax-taxi-app/rest/gettiles
-    #    response=requests.get(url)
-    return render_template('getme.html',error=error,vehicule_map=vehicule_map,debug=debug)
+            return render_template('getme.html', markers_map=markers_map,nbmvts=nbmvts,lon=lon,lat=lat,dist=dist,vehicule_map=vehicule_map)
+
+    return render_template('getme.html',vehicule_map=vehicule_map)
+
 
 
 @app.route("/gettile", methods=['GET', 'POST'])
 def gettile():
-    #form = {"vehicle_id": vehicle_id}
-    #request.form['username']
-    error = None
-    debug=""
-    vehicule_map = Map(
-                identifier="view-side",
-                lat=37.4419,
-                lng=-122.1419,
-                style="height:700px;width:700px;margin:0;",
-                zoom=5
-    )
+
+    vehicule_map=init_vehicule_map
+
+    alltiles=Markup(getdata.tiles())
+
     if request.method == 'POST':
+
         if request.form['tile']:
+
             tile=request.form['tile']
-            url="http://localhost:8080/datastax-taxi-app/rest/getvehicles/"+tile
-            response=requests.get(url)
-            result=""
-            if(response.ok):
-                result=response.content
 
-            #result='[{"vehicle":"2","date":1452986285175,"latLong":{"lat":54.96848201388808,"lon":0.39963558097359564},"tile":"u1b29ne","tile2":""},' \
-            #      '{"vehicle":"2","date":1452986259330,"latLong":{"lat":54.968382013888075,"lon":0.39953558097359565},"tile":"u1b29nd","tile2":""},{"vehicle":"2","date":1452986233158,"latLong":{"lat":54.96828201388807,"lon":0.39963558097359564},"tile":"u1b29ne","tile2":""},{"vehicle":"2","date":1452986218088,"latLong":{"lat":54.968382013888075,"lon":0.39973558097359563},"tile":"u1b29ne","tile2":""},{"vehicle":"2","date":1452986198654,"latLong":{"lat":54.96848201388808,"lon":0.3998355809735956},"tile":"u1b29ne","tile2":""},{"vehicle":"2","date":1452986180302,"latLong":{"lat":54.96858201388808,"lon":0.3999355809735956},"tile":"u1b29ne","tile2":""},{"vehicle":"2","date":1452986173759,"latLong":{"lat":54.96848201388808,"lon":0.3998355809735956},"tile":"u1b29ne","tile2":""},{"vehicle":"2","date":1452986169289,"latLong":{"lat":54.968382013888075,"lon":0.39973558097359563},"tile":"u1b29ne","tile2":""},{"vehicle":"2","date":1452986150746,"latLong":{"lat":54.96828201388807,"lon":0.3998355809735956},"tile":"u1b29ne","tile2":""},{"vehicle":"2","date":1452986129093,"latLong":{"lat":54.96828201388807,"lon":0.3998355809735956},"tile":"u1b29ne","tile2":""},{"vehicle":"2","date":1452986116895,"latLong":{"lat":54.96828201388807,"lon":0.3998355809735956},"tile":"u1b29ne","tile2":""}]'
-            jData = json.loads(result)
+            markers_map=getdata.getvehicules_fortile(tile)
+            nbmvts=len(markers_map)
+
             mappos=Geohash.decode(tile)
-            markers_map=[]
-            for d in jData:
-                markers_map.append((d["latLong"]["lat"],d["latLong"]["lon"]))
 
-            nbmvts=len(jData)
-            #debug=result
+            #app.logger.debug('Debugging markers_map : %s',mappos)
+
             vehicule_map = Map(
                 identifier="view-side",
-                lat=str(mappos[0]),
-                lng=str(mappos[1]),
+                lat=str(float(mappos[0])-0.2),
+                lng=str(float(mappos[1])-0.2),
                 style="height:700px;width:700px;margin:10;",
                 zoom=9,
                 markers=markers_map
                 #markers=[(54.96848201388808, 0.39963558097359564),(54.968382013888075, -0.39953558097359565)]
             )
 
-            return render_template('gettile.html', nbmvts=nbmvts,debug=debug,tile=tile,vehicule_map=vehicule_map)
-            #else:
-            #    error=response.raise_for_status().str
-    return render_template('gettile.html',error=error,vehicule_map=vehicule_map)
+            return render_template('gettile.html', alltiles=alltiles,nbmvts=nbmvts,tile=tile,vehicule_map=vehicule_map)
+
+    return render_template('gettile.html',alltiles=alltiles,vehicule_map=vehicule_map)
 
 
 @app.route("/getvehicle", methods=['GET', 'POST'])
 def getvehicle():
-    #form = {"vehicle_id": vehicle_id}
-    #request.form['username']
-    error = None
-    debug=""
-    vehicule_map = Map(
-                identifier="view-side",
-                lat=37.4419,
-                lng=-122.1419,
-                style="height:700px;width:700px;margin:0;",
-                zoom=5
-    )
+
+    vehicule_map=init_vehicule_map
+
     if request.method == 'POST':
+
         if request.form['vehicle_id']:
+
             vehicle_id=request.form['vehicle_id']
-            day=request.form['day']
-            apiday=day[6:10]+day[3:5]+day[0:2]
-            apiday="20160117"
-            url="http://localhost:8080/datastax-taxi-app/rest/getmovements/"+vehicle_id+"/"+apiday
-            response=requests.get(url)
-            result=""
-            if(response.ok):
-                result=response.content
+            #day=request.form['day']
+            #apiday=day[6:10]+day[3:5]+day[0:2]
+            apiday="20160127"
 
-            #result='[{"vehicle":"2","date":1452986285175,"latLong":{"lat":54.96848201388808,"lon":0.39963558097359564},"tile":"u1b29ne","tile2":""},' \
-            #      '{"vehicle":"2","date":1452986259330,"latLong":{"lat":54.968382013888075,"lon":0.39953558097359565},"tile":"u1b29nd","tile2":""},{"vehicle":"2","date":1452986233158,"latLong":{"lat":54.96828201388807,"lon":0.39963558097359564},"tile":"u1b29ne","tile2":""},{"vehicle":"2","date":1452986218088,"latLong":{"lat":54.968382013888075,"lon":0.39973558097359563},"tile":"u1b29ne","tile2":""},{"vehicle":"2","date":1452986198654,"latLong":{"lat":54.96848201388808,"lon":0.3998355809735956},"tile":"u1b29ne","tile2":""},{"vehicle":"2","date":1452986180302,"latLong":{"lat":54.96858201388808,"lon":0.3999355809735956},"tile":"u1b29ne","tile2":""},{"vehicle":"2","date":1452986173759,"latLong":{"lat":54.96848201388808,"lon":0.3998355809735956},"tile":"u1b29ne","tile2":""},{"vehicle":"2","date":1452986169289,"latLong":{"lat":54.968382013888075,"lon":0.39973558097359563},"tile":"u1b29ne","tile2":""},{"vehicle":"2","date":1452986150746,"latLong":{"lat":54.96828201388807,"lon":0.3998355809735956},"tile":"u1b29ne","tile2":""},{"vehicle":"2","date":1452986129093,"latLong":{"lat":54.96828201388807,"lon":0.3998355809735956},"tile":"u1b29ne","tile2":""},{"vehicle":"2","date":1452986116895,"latLong":{"lat":54.96828201388807,"lon":0.3998355809735956},"tile":"u1b29ne","tile2":""}]'
-            jData = json.loads(result)
-            mappos=Geohash.decode(jData[0]["tile"])
-            markers_map=[]
-            for d in jData:
-                markers_map.append((d["latLong"]["lat"],d["latLong"]["lon"]))
+            markers_map=getdata.getvehicules_forone(vehicle_id,apiday)
 
-            nbmvts=len(jData)
-            #debug="["+vehicle_mvt[:-1]+"]"
+            nbmvts=len(markers_map)
+            if nbmvts > 0:
+                latmap=str(markers_map[0][0])
+                lngmap=str(markers_map[0][1])
+                zoom=11
+            else:
+                latmap=initlat
+                lngmap=-initlng
+                zoom=5
+
+
             vehicule_map = Map(
                 identifier="view-side",
-                lat=str(mappos[0]),
-                lng=str(mappos[1]),
+                lat=latmap,
+                lng=lngmap,
                 style="height:700px;width:700px;margin:10;",
-                zoom=11,
+                zoom=zoom,
                 markers=markers_map
                 #markers=[(54.96848201388808, 0.39963558097359564),(54.968382013888075, -0.39953558097359565)]
             )
 
-            return render_template('getvehicle.html', nbmvts=nbmvts,debug=debug,vehicle_id=vehicle_id,vehicule_map=vehicule_map,day=apiday)
-            #else:
-            #    error=response.raise_for_status().str
-    return render_template('getvehicle.html',error=error,vehicule_map=vehicule_map,debug=debug)
+            return render_template('getvehicle.html', nbmvts=nbmvts,vehicle_id=vehicle_id,vehicule_map=vehicule_map,day=apiday)
+
+    return render_template('getvehicle.html',vehicule_map=vehicule_map)
+
+
+
 
 
 @app.errorhandler(404)
 def page_not_found(error):
-    return render_template('page_not_found.html'), 404
+    return render_template('404.html'), 404
 
 if __name__ == "__main__":
     app.run()

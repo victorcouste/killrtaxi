@@ -3,9 +3,8 @@
 
 <div class="container">
 
-    {% if error %}<div class="error"><strong>Error:</strong> {{ error }}</div>{% endif %}
-
 <form  method="post" class="form-inline">
+
   Vehicle Id <input type="number" class="input-small" placeholder="Enter a vehicule id" name="vehicle_id" value="{{vehicle_id}}">
                 Day <div class='input-group date' id='datetimepicker1'>
                     <input type='text' class="form-control" name="day" value="{{day}}"/>
@@ -14,6 +13,7 @@
                     </span>
                 </div>
   <button type="submit" class="btn btn-primary">Search</button>
+
 </form>
 
 
@@ -24,12 +24,6 @@
             });
         </script>
 
-</div>
-
-    <!-- <p class="text-success">
-    {{ debug}}
-    {{day}}
-    </p>-->
 
     <p class="text-success">
         <h2> {{nbmvts}} movements of vehicule {{vehicle_id}}</h2>

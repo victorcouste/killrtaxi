@@ -1,9 +1,8 @@
 {% extends "layout.html" %}
+
 {% block body %}
 
 <div class="container">
-
-    {% if error %}<div class="error"><strong>Error:</strong> {{ error }}</div>{% endif %}
 
 <form  method="post" class="form-inline">
   My position:
@@ -15,13 +14,9 @@
 </form>
 
 
-</div>
-
-     <p class="text-success">
-    {{ debug}}
-    </p>
 
     <p class="text-success">
+
         <h2> {{nbmvts}} vehicules around me ({{lat}},{{lon}})</h2>
         {{vehicule_map.html}}
 

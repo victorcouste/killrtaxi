@@ -1,21 +1,21 @@
 {% extends "layout.html" %}
+
 {% block body %}
 
 <div class="container">
 
-    {% if error %}<div class="error"><strong>Error:</strong> {{ error }}</div>{% endif %}
-
 <form  method="post" class="form-inline">
-  Geohash tile (like gcrf or gcrq) <input class="input-small" placeholder="Enter a geohash tile" name="tile" value="{{tile}}">
+  Geohash tile  
+
+    <select class="form-control" name="tile" >
+        {{alltiles}}
+    </select>
+
+    <!--<input class="input-small" placeholder="Enter a geohash tile" name="tile" value="{{tile}}">-->
 
   <button type="submit" class="btn btn-primary">Search</button>
 </form>
 
-</div>
-
-   <!--  <p class="text-success">
-    {{ debug}}
-    </p>-->
 
     <p class="text-success">
         <h2> {{nbmvts}} vehicules in geohash tile {{tile}}</h2>
