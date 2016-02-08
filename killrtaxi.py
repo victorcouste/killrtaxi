@@ -17,6 +17,7 @@ GoogleMaps(app)
 
 initlat=51
 initlng=0
+ErrorMessage="Problem with API calls, check your API application"
 
 init_vehicule_map = Map(
     identifier="view-side",
@@ -51,13 +52,21 @@ def getme():
 
     if request.method == 'POST':
 
-        if request.form['lon'] and request.form['lat'] and request.form['dist']:
+        if request.form['lon'] and request.form['lat']:
 
             lon=request.form['lon']
             lat=request.form['lat']
             dist=request.form['dist']
 
+            if dist=="":dist="10"
+
+            app.logger.debug('Debugging dist : %s',dist)
+
             markers_map=getdata.getvehicules_forme(lat,lon,dist)
+
+            if not isinstance(markers_map,list):
+                return render_template('getme.html',vehicule_map=vehicule_map,error=ErrorMessage)
+
             nbmvts=len(markers_map)
 
             vehicule_map = Map(
@@ -71,7 +80,7 @@ def getme():
                 #markers=[(54.96848201388808, 0.39963558097359564),(54.968382013888075, -0.39953558097359565)]
             )
 
-            return render_template('getme.html', markers_map=markers_map,nbmvts=nbmvts,lon=lon,lat=lat,dist=dist,vehicule_map=vehicule_map)
+            return render_template('getme.html', nbmvts=nbmvts,lon=lon,lat=lat,dist=dist,vehicule_map=vehicule_map)
 
     return render_template('getme.html',vehicule_map=vehicule_map)
 
@@ -82,7 +91,11 @@ def gettile():
 
     vehicule_map=init_vehicule_map
 
-    alltiles=Markup(getdata.tiles())
+    tilesresult=getdata.tiles()
+    if tilesresult[:8]<>"<option>":
+        return render_template('gettile.html',vehicule_map=vehicule_map,error=ErrorMessage)
+    else:
+        alltiles=Markup(tilesresult)
 
     if request.method == 'POST':
 
@@ -91,11 +104,15 @@ def gettile():
             tile=request.form['tile']
 
             markers_map=getdata.getvehicules_fortile(tile)
+
+            #app.logger.debug('Debugging markers_map : %s',markers_map)
+
+            if not isinstance(markers_map,list):
+                return render_template('gettile.html',vehicule_map=vehicule_map,error=ErrorMessage)
+
             nbmvts=len(markers_map)
 
             mappos=Geohash.decode(tile)
-
-            #app.logger.debug('Debugging markers_map : %s',mappos)
 
             vehicule_map = Map(
                 identifier="view-side",
@@ -127,6 +144,9 @@ def getvehicle():
             apiday="20160127"
 
             markers_map=getdata.getvehicules_forone(vehicle_id,apiday)
+
+            if not isinstance(markers_map,list):
+                return render_template('getvehicle.html',vehicule_map=vehicule_map,error=ErrorMessage)
 
             nbmvts=len(markers_map)
             if nbmvts > 0:

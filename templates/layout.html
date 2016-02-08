@@ -51,6 +51,13 @@
         </nav>
         </div>
 
+
+        {% if error %}
+
+    <h2 class="bg-warning"> {{error}} </h2>
+
+    {% endif %}
+
     {% block body %}{% endblock %}
 
     </div>
