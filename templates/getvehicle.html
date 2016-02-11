@@ -5,17 +5,19 @@
 
 <form  method="post" class="form-inline">
 
-  Vehicle Id <input type="number" class="input-small" placeholder="Enter a vehicule id" name="vehicle_id" value="{{vehicle_id}}">
-                Day <div class='input-group date' id='datetimepicker1'>
-                    <input type='text' class="form-control" name="day" value="{{day}}"/>
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                </div>
-  <button type="submit" class="btn btn-primary">Search</button>
+  <label>Vehicle Id</label>
+    <input type="number" class="input-small" placeholder="Enter a vehicule id" name="vehicle_id" value="{{vehicle_id}}">
+    <label>Day</label>
+    <div class='input-group date' id='datetimepicker1'>
+        <input type='text' class="form-control" name="day" value="{{day}}"/>
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
 
 </form>
-
 
         <script type="text/javascript">
             $(function () {
@@ -24,12 +26,14 @@
             });
         </script>
 
-
     <p class="text-success">
+
+        {% if nbmvts %}
         <h2> {{nbmvts}} movements of vehicule {{vehicle_id}}</h2>
+        {% endif %}
+
         {{vehicule_map.html}}
     </p>
-
 
 </div> <!-- /container -->
 

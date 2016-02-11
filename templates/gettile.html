@@ -5,20 +5,20 @@
 <div class="container">
 
 <form  method="post" class="form-inline">
-  Geohash tile  
-
+  <label>Geohash tile</label>>
     <select class="form-control" name="tile" >
         {{alltiles}}
     </select>
-
     <!--<input class="input-small" placeholder="Enter a geohash tile" name="tile" value="{{tile}}">-->
-
   <button type="submit" class="btn btn-primary">Search</button>
 </form>
 
-
     <p class="text-success">
+
+        {% if nbmvts %}
         <h2> {{nbmvts}} vehicules in geohash tile {{tile}}</h2>
+        {% endif %}
+
         {{vehicule_map.html}}
 
     </p>

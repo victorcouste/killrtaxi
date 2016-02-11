@@ -17,7 +17,7 @@ GoogleMaps(app)
 
 initlat=51
 initlng=0
-ErrorMessage="Problem with API calls, check your API application"
+ErrorMessage="Problem with API calls, check console messages and API application"
 
 init_vehicule_map = Map(
     identifier="view-side",
@@ -65,6 +65,7 @@ def getme():
             markers_map=getdata.getvehicules_forme(lat,lon,dist)
 
             if not isinstance(markers_map,list):
+                app.logger.debug('Connection error : %s',markers_map)
                 return render_template('getme.html',vehicule_map=vehicule_map,error=ErrorMessage)
 
             nbmvts=len(markers_map)
@@ -92,7 +93,9 @@ def gettile():
     vehicule_map=init_vehicule_map
 
     tilesresult=getdata.tiles()
-    if tilesresult[:8]<>"<option>":
+
+    if tilesresult[:8]!="<option>":
+        app.logger.debug('Connection error : %s',tilesresult)
         return render_template('gettile.html',vehicule_map=vehicule_map,error=ErrorMessage)
     else:
         alltiles=Markup(tilesresult)
@@ -108,6 +111,7 @@ def gettile():
             #app.logger.debug('Debugging markers_map : %s',markers_map)
 
             if not isinstance(markers_map,list):
+                app.logger.debug('Connection error : %s',markers_map)
                 return render_template('gettile.html',vehicule_map=vehicule_map,error=ErrorMessage)
 
             nbmvts=len(markers_map)
@@ -146,6 +150,7 @@ def getvehicle():
             markers_map=getdata.getvehicules_forone(vehicle_id,apiday)
 
             if not isinstance(markers_map,list):
+                app.logger.debug('Connection error : %s',markers_map)
                 return render_template('getvehicle.html',vehicule_map=vehicule_map,error=ErrorMessage)
 
             nbmvts=len(markers_map)

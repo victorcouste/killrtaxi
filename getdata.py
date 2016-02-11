@@ -3,7 +3,14 @@ import requests,json
 def tiles():
     stroptions=''
     url="http://localhost:8080/datastax-taxi-app/rest/gettiles"
-    response=requests.get(url)
+
+    try:
+        response=requests.get(url)
+    except requests.exceptions.RequestException as e:
+        return e
+
+    #app.logger.debug('Debugging : %s',    response.status_code)
+
     if(response.ok):
         result=response.content
     else:
@@ -20,7 +27,12 @@ def getvehicules_forme(lat,lon,dist):
 
     markers_map=[]
     url="http://localhost:8080/datastax-taxi-app/rest/search/"+str(lat)+"/"+str(lon)+"/"+str(dist)
-    response=requests.get(url)
+
+    try:
+        response=requests.get(url)
+    except requests.exceptions.RequestException as e:
+        return e
+
     if(response.ok):
         result=response.content
     else:
@@ -39,7 +51,12 @@ def getvehicules_fortile(tile):
 
     markers_map=[]
     url="http://localhost:8080/datastax-taxi-app/rest/getvehicles/"+tile
-    response=requests.get(url)
+
+    try:
+        response=requests.get(url)
+    except requests.exceptions.RequestException as e:
+        return e
+
     if(response.ok):
         result=response.content
     else:
@@ -58,7 +75,12 @@ def getvehicules_forone(vehicle_id,apiday):
 
     markers_map=[]
     url="http://localhost:8080/datastax-taxi-app/rest/getmovements/"+vehicle_id+"/"+apiday
-    response=requests.get(url)
+
+    try:
+        response=requests.get(url)
+    except requests.exceptions.RequestException as e:
+        return e
+
     if(response.ok):
         result=response.content
     else:
