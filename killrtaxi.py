@@ -20,7 +20,7 @@ initlat=51
 initlng=0
 ErrorMessage="Problem with API calls, check console messages and API application"
 
-init_vehicule_map = Map(
+init_vehicle_map = Map(
     identifier="view-side",
     lat=initlat,
     lng=-initlng,
@@ -49,7 +49,7 @@ def home():
 @app.route("/getme", methods=['GET', 'POST'])
 def getme():
 
-    vehicule_map=init_vehicule_map
+    vehicle_map=init_vehicle_map
 
     if request.method == 'POST':
 
@@ -63,15 +63,15 @@ def getme():
 
             app.logger.debug('Debugging dist : %s',dist)
 
-            markers_map=getdata.getvehicules_forme(lat,lon,dist)
+            markers_map=getdata.getvehicles_forme(lat,lon,dist)
 
             if not isinstance(markers_map,list):
                 app.logger.debug('Connection error : %s',markers_map)
-                return render_template('getme.html',vehicule_map=vehicule_map,error=ErrorMessage)
+                return render_template('getme.html',vehicle_map=vehicle_map,error=ErrorMessage)
 
             nbmvts=len(markers_map)
 
-            vehicule_map = Map(
+            vehicle_map = Map(
                 identifier="view-side",
                 lat=lat,
                 lng=lon,
@@ -82,22 +82,22 @@ def getme():
                 #markers=[(54.96848201388808, 0.39963558097359564),(54.968382013888075, -0.39953558097359565)]
             )
 
-            return render_template('getme.html', nbmvts=nbmvts,lon=lon,lat=lat,dist=dist,vehicule_map=vehicule_map)
+            return render_template('getme.html', nbmvts=nbmvts,lon=lon,lat=lat,dist=dist,vehicle_map=vehicle_map)
 
-    return render_template('getme.html',vehicule_map=vehicule_map)
+    return render_template('getme.html',vehicle_map=vehicle_map)
 
 
 
 @app.route("/gettile", methods=['GET', 'POST'])
 def gettile():
 
-    vehicule_map=init_vehicule_map
+    vehicle_map=init_vehicle_map
 
     tilesresult=getdata.tiles()
 
     if tilesresult[:8]!="<option>":
         app.logger.debug('Connection error : %s',tilesresult)
-        return render_template('gettile.html',vehicule_map=vehicule_map,error=ErrorMessage)
+        return render_template('gettile.html',vehicle_map=vehicle_map,error=ErrorMessage)
     else:
         alltiles=Markup(tilesresult)
 
@@ -107,19 +107,19 @@ def gettile():
 
             tile=request.form['tile']
 
-            markers_map=getdata.getvehicules_fortile(tile)
+            markers_map=getdata.getvehicles_fortile(tile)
 
             #app.logger.debug('Debugging KILLRTAXI : %s',markers_map)
 
             if not isinstance(markers_map,list):
                 app.logger.debug('Connection error : %s',markers_map)
-                return render_template('gettile.html',vehicule_map=vehicule_map,error=ErrorMessage)
+                return render_template('gettile.html',vehicle_map=vehicle_map,error=ErrorMessage)
 
             nbmvts=len(markers_map)
 
             mappos=Geohash.decode(tile)
 
-            vehicule_map = Map(
+            vehicle_map = Map(
                 identifier="view-side",
                 lat=str(float(mappos[0])-0.2),
                 lng=str(float(mappos[1])-0.2),
@@ -129,15 +129,15 @@ def gettile():
                 #markers=[(54.96848201388808, 0.39963558097359564),(54.968382013888075, -0.39953558097359565)]
             )
 
-            return render_template('gettile.html', alltiles=alltiles,nbmvts=nbmvts,tile=tile,vehicule_map=vehicule_map)
+            return render_template('gettile.html', alltiles=alltiles,nbmvts=nbmvts,tile=tile,vehicle_map=vehicle_map)
 
-    return render_template('gettile.html',alltiles=alltiles,vehicule_map=vehicule_map)
+    return render_template('gettile.html',alltiles=alltiles,vehicle_map=vehicle_map)
 
 
 @app.route("/getvehicle", methods=['GET', 'POST'])
 def getvehicle():
 
-    vehicule_map=init_vehicule_map
+    vehicle_map=init_vehicle_map
 
     if request.method == 'POST':
 
@@ -156,11 +156,11 @@ def getvehicle():
             #apiday="20160127"
             app.logger.debug('Debugging KILLRTAXI : %s',apiday)
 
-            markers_map=getdata.getvehicules_forone(vehicle_id,apiday)
+            markers_map=getdata.getvehicles_forone(vehicle_id,apiday)
 
             if not isinstance(markers_map,list):
                 app.logger.debug('Connection error : %s',markers_map)
-                return render_template('getvehicle.html',vehicule_map=vehicule_map,error=ErrorMessage)
+                return render_template('getvehicle.html',vehicle_map=vehicle_map,error=ErrorMessage)
 
             nbmvts=len(markers_map)
 
@@ -175,7 +175,7 @@ def getvehicle():
                 lngmap=-initlng
                 zoom=5
 
-            vehicule_map = Map(
+            vehicle_map = Map(
                 identifier="view-side",
                 lat=latmap,
                 lng=lngmap,
@@ -185,9 +185,9 @@ def getvehicle():
                 #markers=[(54.96848201388808, 0.39963558097359564),(54.968382013888075, -0.39953558097359565)]
             )
 
-            return render_template('getvehicle.html', nbmvts=nbmvts,vehicle_id=vehicle_id,vehicule_map=vehicule_map,day=day)
+            return render_template('getvehicle.html', nbmvts=nbmvts,vehicle_id=vehicle_id,vehicle_map=vehicle_map,day=day)
 
-    return render_template('getvehicle.html',vehicule_map=vehicule_map)
+    return render_template('getvehicle.html',vehicle_map=vehicle_map)
 
 
 

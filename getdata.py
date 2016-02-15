@@ -23,7 +23,7 @@ def tiles():
     return stroptions
 
 
-def getvehicules_forme(lat,lon,dist):
+def getvehicles_forme(lat,lon,dist):
 
     markers_map=[]
     url="http://localhost:8080/datastax-taxi-app/rest/search/"+str(lat)+"/"+str(lon)+"/"+str(dist)
@@ -47,7 +47,7 @@ def getvehicules_forme(lat,lon,dist):
     return markers_map
 
 
-def getvehicules_fortile(tile):
+def getvehicles_fortile(tile):
 
     markers_map=[]
     url="http://localhost:8080/datastax-taxi-app/rest/getvehicles/"+tile
@@ -71,7 +71,7 @@ def getvehicules_fortile(tile):
     return markers_map
 
 
-def getvehicules_forone(vehicle_id,apiday):
+def getvehicles_forone(vehicle_id,apiday):
 
     markers_map=[]
     url="http://localhost:8080/datastax-taxi-app/rest/getmovements/"+vehicle_id+"/"+apiday

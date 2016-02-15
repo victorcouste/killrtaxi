@@ -29,7 +29,7 @@
 
 
     {% if request.endpoint == 'getvehicle' or request.endpoint == 'gettile'  or request.endpoint == 'getme'%}
-            {{vehicule_map.js}}
+            {{vehicle_map.js}}
      {% endif %}
 
 </head>
@@ -45,9 +45,9 @@
         <nav>
             <ul class="nav nav-pills">
                 <li {% if request.endpoint == 'home'%} class="active" {% endif %}><a href="{{ url_for('home') }}" >Home</a></li>
-                <li {% if request.endpoint == 'getvehicle'%} class="active" {% endif %}><a href="{{ url_for('getvehicle') }}" >Movements of a vehicule</a></li>
-                <li {% if request.endpoint == 'gettile'%} class="active" {% endif %}><a href="{{ url_for('gettile') }}" >Vehicules in a geohash tile</a></li>
-                <li {% if request.endpoint == 'getme'%} class="active" {% endif %}><a href="{{ url_for('getme') }}" >Vehicules around me</a></li>
+                <li {% if request.endpoint == 'getvehicle'%} class="active" {% endif %}><a href="{{ url_for('getvehicle') }}" >Movements of a vehicle</a></li>
+                <li {% if request.endpoint == 'gettile'%} class="active" {% endif %}><a href="{{ url_for('gettile') }}" >Vehicles in a geohash tile</a></li>
+                <li {% if request.endpoint == 'getme'%} class="active" {% endif %}><a href="{{ url_for('getme') }}" >Vehicles around me</a></li>
             </ul>
         </nav>
         </div>

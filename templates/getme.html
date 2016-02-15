@@ -24,14 +24,14 @@
     <p class="text-success">
 
         {% if nbmvts==0 %}
-        <h2> No vehicules around me ({{lat}},{{lon}})</h2>
+        <h2> No vehicles around me ({{lat}},{{lon}})</h2>
         {% endif %}
 
         {% if nbmvts %}
-        <h2> {{nbmvts}} vehicules around me ({{lat}},{{lon}})</h2>
+        <h2> {{nbmvts}} vehicles around me ({{lat}},{{lon}})</h2>
         {% endif %}
 
-    {{vehicule_map.html}}
+    {{vehicle_map.html}}
 
     </p>
 
