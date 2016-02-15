@@ -1211,7 +1211,10 @@ h6 .small,
 h1,
 .h1,
 h2,
-.h2,
+.h2 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
 h3,
 .h3 {
   margin-top: 20px;
@@ -1574,8 +1577,8 @@ pre code {
 .container {
   margin-right: auto;
   margin-left: auto;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 30px;
+  padding-right: 30px;
 }
 @media (min-width: 768px) {
   .container {
@@ -2902,7 +2905,7 @@ select[multiple].input-lg {
 @media (min-width: 768px) {
   .form-inline .form-group {
     display: inline-block;
-    margin-bottom: 0;
+    margin-bottom: 20;
     vertical-align: middle;
   }
   .form-inline .form-control {
@@ -4004,8 +4007,8 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   margin-left: -1px;
 }
 .nav {
-  margin-bottom: 0;
-  padding-left: 0;
+  margin-bottom: 20px;
+  padding-left: 10px;
   list-style: none;
 }
 .nav > li {
@@ -5005,7 +5008,7 @@ a.badge:focus {
 }
 .container .jumbotron,
 .container-fluid .jumbotron {
-  border-radius: 6px;
+  border-radius: 20px;
 }
 .jumbotron .container {
   max-width: 100%;

@@ -22,7 +22,7 @@
     <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-theme.min.css') }}">-->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-datetimepicker.min.css') }}">
 
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='theme.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='theme.css') }}">
 
     <!-- Custom styles for this template -->
     <!-- <link href="{{ url_for('static', filename='justified-nav.css') }}" rel="stylesheet"> -->
@@ -38,9 +38,10 @@
 
     <div class="container">
 
-        <div class="masthead">
+        <div>
 
         <h2>KillrTaxi</h2>
+
         <nav>
             <ul class="nav nav-pills">
                 <li {% if request.endpoint == 'home'%} class="active" {% endif %}><a href="{{ url_for('home') }}" >Home</a></li>
