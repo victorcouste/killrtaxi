@@ -4,6 +4,7 @@ from flask_googlemaps import Map
 import json
 import Geohash
 import getdata
+import datetime
 
 # configuration
 DEBUG = True
@@ -108,7 +109,7 @@ def gettile():
 
             markers_map=getdata.getvehicules_fortile(tile)
 
-            #app.logger.debug('Debugging markers_map : %s',markers_map)
+            #app.logger.debug('Debugging KILLRTAXI : %s',markers_map)
 
             if not isinstance(markers_map,list):
                 app.logger.debug('Connection error : %s',markers_map)
@@ -143,9 +144,17 @@ def getvehicle():
         if request.form['vehicle_id']:
 
             vehicle_id=request.form['vehicle_id']
-            #day=request.form['day']
-            #apiday=day[6:10]+day[3:5]+day[0:2]
-            apiday="20160127"
+            day=request.form['day']
+
+            if day=="":
+                now=datetime.datetime.now()
+                day=now.strftime("%d/%m/%Y")
+                apiday=now.strftime("%Y%m%d")
+            else:
+                apiday=day[6:10]+day[3:5]+day[0:2]
+
+            #apiday="20160127"
+            app.logger.debug('Debugging KILLRTAXI : %s',apiday)
 
             markers_map=getdata.getvehicules_forone(vehicle_id,apiday)
 
@@ -154,6 +163,9 @@ def getvehicle():
                 return render_template('getvehicle.html',vehicule_map=vehicule_map,error=ErrorMessage)
 
             nbmvts=len(markers_map)
+
+            app.logger.debug('Debugging KILLRTAXI : %s',nbmvts)
+
             if nbmvts > 0:
                 latmap=str(markers_map[0][0])
                 lngmap=str(markers_map[0][1])
@@ -162,7 +174,6 @@ def getvehicle():
                 latmap=initlat
                 lngmap=-initlng
                 zoom=5
-
 
             vehicule_map = Map(
                 identifier="view-side",
@@ -174,7 +185,7 @@ def getvehicle():
                 #markers=[(54.96848201388808, 0.39963558097359564),(54.968382013888075, -0.39953558097359565)]
             )
 
-            return render_template('getvehicle.html', nbmvts=nbmvts,vehicle_id=vehicle_id,vehicule_map=vehicule_map,day=apiday)
+            return render_template('getvehicle.html', nbmvts=nbmvts,vehicle_id=vehicle_id,vehicule_map=vehicule_map,day=day)
 
     return render_template('getvehicle.html',vehicule_map=vehicule_map)
 

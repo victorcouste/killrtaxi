@@ -5,7 +5,7 @@
 <div class="container">
 
 <form  method="post" class="form-inline">
-  <label>Geohash tile</label>>
+  <label>Geohash tile</label>
     <select class="form-control" name="tile" >
         {{alltiles}}
     </select>
@@ -14,6 +14,10 @@
 </form>
 
     <p class="text-success">
+
+        {% if nbmvts==0 %}
+        <h2> No vehicules in geohash tile {{tile}}</h2>
+        {% endif %}
 
         {% if nbmvts %}
         <h2> {{nbmvts}} vehicules in geohash tile {{tile}}</h2>

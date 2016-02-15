@@ -4,7 +4,7 @@
 
 <div class="container">
 
-    <h3> My position:</h3>
+    <h3> My position</h3>
 
 <form  method="post" class="form-inline">
 
@@ -17,11 +17,15 @@
         <label>Distance (10 km by default)</label>
         <input class="form-control" placeholder="distance" name="dist" value="{{dist}}">
 
-  <button type="submit" class="btn btn-primary">Search</button>
+  <button type="submit" class="btn-primary">Search</button>
 
 </form>
 
     <p class="text-success">
+
+        {% if nbmvts==0 %}
+        <h2> No vehicules around me ({{lat}},{{lon}})</h2>
+        {% endif %}
 
         {% if nbmvts %}
         <h2> {{nbmvts}} vehicules around me ({{lat}},{{lon}})</h2>
