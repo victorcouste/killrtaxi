@@ -6,22 +6,29 @@
 
     <h3> My position</h3>
 
-<form  method="post" class="form-inline">
+    <form  method="post" class="form-inline">
 
-        <label>Latitude [50,52]</label>
-        <input type="text" class="form-control" placeholder="latitude" name="lat" value="{{lat}}">
+        <div class="col-lg-2">
+            <label>Latitude [50,52]</label>
+            <input type="text" class="form-control" placeholder="latitude" name="lat" value="{{lat}}">
+        </div>
+        <div class="col-lg-2">
+            <label>Longitude [-2, 2]</label>
+            <input class="form-control" placeholder="longitude" name="lon" value="{{lon}}">
+        </div>
+        <div class="col-lg-3">
+            <label>Distance (10 km by default)</label>
+            <input class="form-control" placeholder="distance" name="dist" value="{{dist}}">
+        </div>
 
-        <label>Longitude [-2, 2]</label>
-        <input class="form-control" placeholder="longitude" name="lon" value="{{lon}}">
+    <button type="submit" class="btn btn-primary">Search</button>
 
-        <label>Distance (10 km by default)</label>
-        <input class="form-control" placeholder="distance" name="dist" value="{{dist}}">
+    </form>
+</div>
 
-  <button type="submit" class="btn-primary">Search</button>
+<div class="container">
 
-</form>
-
-    <p class="text-success">
+    <p>
 
         {% if nbmvts==0 %}
         <h2> No vehicles around me ({{lat}},{{lon}})</h2>

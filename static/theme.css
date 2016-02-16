@@ -1389,6 +1389,7 @@ a.bg-info:focus {
   background-color: #31b0d5;
 }
 .bg-warning {
+  color: #e9322d;
   background-color: #ffff00;
 }
 a.bg-warning:hover,
@@ -5108,7 +5109,7 @@ a.thumbnail.active {
   color: #cc0000;
 }
 .alert-warning {
-  background-color: #ffff00;
+  background-color: #ff0000;
   border-color: #ff0000;
   color: #ff0000;
 }

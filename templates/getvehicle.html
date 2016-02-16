@@ -3,21 +3,21 @@
 
 <div class="container">
 
-<form  method="post" class="form-inline">
+    <form  method="post" class="form-inline">
 
-  <label>Vehicle Id</label>
-    <input type="number" class="input-small" placeholder="Enter a vehicule id" name="vehicle_id" value="{{vehicle_id}}">
-    <label>Day (today by default)</label>
-    <div class='input-group date' id='datetimepicker1'>
-        <input type='text' class="form-control" name="day" value="{{day}}"/>
-            <span class="input-group-addon">
-                <span class="glyphicon glyphicon-calendar"></span>
-            </span>
-    </div>
+      <label>Vehicle Id</label>
+        <input type="number" class="form-control" placeholder="Enter a vehicule id" name="vehicle_id" value="{{vehicle_id}}">
+        <label>Day (today by default)</label>
+        <div class='input-group date' id='datetimepicker1'>
+            <input type='text' class="form-control" name="day" value="{{day}}"/>
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+        </div>
 
-    <button type="submit" class="btn btn-primary">Search</button>
+        <button type="submit" class="btn btn-primary">Search</button>
 
-</form>
+    </form>
 
         <script type="text/javascript">
             $(function () {
@@ -26,7 +26,11 @@
             });
         </script>
 
-    <p class="text-success">
+</div>
+
+<div class="container">
+
+    <p>
 
         {% if nbmvts==0 %}
         <h2> No movements of vehicle {{vehicle_id}}</h2>
