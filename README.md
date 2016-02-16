@@ -1,5 +1,7 @@
 # killrtaxi
 
+ ![alt tag](https://github.com/victorcouste/killrtaxi/blob/master/static/taxi.png)
+
 This is a Web demo application using Patrick Callaghan DataStax/Cassandra demo API found here https://github.com/PatrickCallaghan/datastax-taxi-app
 
 As Patrick says "This demo traces moving vehicles as they pass through geohash tiles. It also keeps track of a vehicle movements on a day to day basis. Similar to a vessel tracking or taxi application."
